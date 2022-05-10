@@ -12,9 +12,9 @@
                     Bienvenido
                     <div class="access-cards flex flex-wrap">
                         <div class="access h-full w-full sm:w-1/2 md:w-1/4 lg:w-1/6 p-1">
-                            <div class="text-center p-1 py-2 rounded shadow-md border-l-4 border-red-300 hover:shadow-lg hover:bg-red-300 text-red-800 cursor-pointer">
+                            <div class="relative text-center p-1 py-2 rounded shadow-md border-l-4 border-red-300 hover:shadow-lg hover:bg-red-300 text-red-800 cursor-pointer">
                                 <span class="fa-solid fa-users block text-4xl" aria-hidden="true"></span>
-                                <a href="#">Usuarios</a>
+                                <a href="/usuarios" class="stretched-link">Usuarios</a>
                             </div>
                         </div>
                         <div class="access h-full w-full sm:w-1/2 md:w-1/4 lg:w-1/6 p-1">
