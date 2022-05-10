@@ -5,11 +5,26 @@
         </h2>
     </x-slot>
 
-    <div class="py-12">
+    <div class="py-6">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <div class="text-center md:text-right mb-4 p-3">
+                <a href="#" class="border border-green-600 hover:border-green-700 bg-green-600 hover:bg-green-700 font-bold text-white shadow-sm hover:shadow-lg rounded-lg px-3 py-2 mr-3 uppercase">
+                    Registrar pago
+                </a>
+                <a href="#" class="border border-green-600 hover:border-green-700 font-bold text-green-600 hover:text-green-700 shadow-sm hover:shadow-lg rounded-lg px-3 py-2 uppercase">
+                    Hacer prestamo
+                </a>
+            </div>
+            <div class="pb-6 overflow-hidden shadow-sm sm:rounded-lg">
+                <div class="bg-white border-b border-gray-200 p-6">
+                    <h3 class="text-gray-800 font-bold">Cobros del día de hoy</h3>
+                    <p>No hay cobros a realizar el día de hoy</p>
+                </div>
+                
+            </div>
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 bg-white border-b border-gray-200">
-                    Bienvenido
+                    <p>Bienvenido, admin</p>
                     <div class="access-cards flex flex-wrap">
                         <div class="access h-full w-full sm:w-1/2 md:w-1/4 lg:w-1/6 p-1">
                             <div class="relative text-center p-1 py-2 rounded shadow-md border-l-4 border-red-300 hover:shadow-lg hover:bg-red-300 text-red-800 cursor-pointer">
