@@ -3,6 +3,8 @@
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\ClienteController;
+use App\Http\Controllers\PrestamoController;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,6 +25,10 @@ Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth'])->name('dashboard');
 
-Route::get('usuarios', [UserController::class, 'index'])->middleware(['auth'])->name('usuarios');;
+Route::get('/usuarios', [UserController::class, 'index'])->middleware(['auth'])->name('usuarios');
+Route::get('/clientes', [ClienteController::class, 'index'])->middleware(['auth'])->name('clientes');
+Route::get('/prestamos', [PrestamoController::class, 'index'])->middleware(['auth'])->name('prestamos');
+Route::get('/prestamos/create', [PrestamoController::class, 'create'])->middleware(['auth'])->name('prestamosCreate');
+Route::post('/prestamos/store', [PrestamoController::class, 'store'])->middleware(['auth'])->name('prestamosStore');
 
 require __DIR__.'/auth.php';

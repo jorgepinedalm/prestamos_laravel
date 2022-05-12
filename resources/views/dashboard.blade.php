@@ -8,10 +8,10 @@
     <div class="py-6">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="text-center md:text-right mb-4 p-3">
-                <a href="#" class="border border-green-600 hover:border-green-700 bg-green-600 hover:bg-green-700 font-bold text-white shadow-sm hover:shadow-lg rounded-lg px-3 py-2 mr-3 uppercase">
+                <a href="#" class="w-full sm:w-auto inline-block mb-3 sm:mb-0 border border-green-600 hover:border-green-700 bg-green-600 hover:bg-green-700 font-bold text-white shadow-sm hover:shadow-lg rounded-lg px-3 py-2 mr-3 uppercase">
                     Registrar pago
                 </a>
-                <a href="#" class="border border-green-600 hover:border-green-700 font-bold text-green-600 hover:text-green-700 shadow-sm hover:shadow-lg rounded-lg px-3 py-2 uppercase">
+                <a href="/prestamos/create" class="w-full sm:w-auto inline-block mb-3 sm:mb-0 border border-green-600 hover:border-green-700 font-bold text-green-600 hover:text-green-700 shadow-sm hover:shadow-lg rounded-lg px-3 py-2 uppercase">
                     Hacer prestamo
                 </a>
             </div>
@@ -39,15 +39,15 @@
                             </div>
                         </div>
                         <div class="access h-full w-full sm:w-1/2 md:w-1/4 lg:w-1/6 p-1">
-                            <div class="text-center p-1 py-2 rounded shadow-md hover:shadow-lg hover:bg-green-300 text-green-800 cursor-pointer">
+                            <div class="relative text-center p-1 py-2 rounded shadow-md hover:shadow-lg hover:bg-green-300 text-green-800 cursor-pointer">
                                 <span class="fa-solid fa-handshake-simple block text-4xl" aria-hidden="true"></span>
-                                <a href="#">Clientes</a>
+                                <a href="/clientes" class="stretched-link">Clientes</a>
                             </div>
                         </div>
                         <div class="access h-full w-full sm:w-1/2 md:w-1/4 lg:w-1/6 p-1">
-                            <div class="text-center p-1 py-2 rounded shadow-md hover:shadow-lg hover:bg-cyan-300 text-cyan-800 cursor-pointer">
+                            <div class="relative text-center p-1 py-2 rounded shadow-md hover:shadow-lg hover:bg-cyan-300 text-cyan-800 cursor-pointer">
                                 <span class="fa-solid fa-money-bill-transfer block text-4xl" aria-hidden="true"></span>
-                                <a href="#">Prestamos</a>
+                                <a href="/prestamos" class="stretched-link">Prestamos</a>
                             </div>
                         </div>
                         <div class="access h-full w-full sm:w-1/2 md:w-1/4 lg:w-1/6 p-1">
