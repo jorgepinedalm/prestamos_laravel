@@ -15,9 +15,9 @@ class PeriodoPrestamo extends Model
 
     protected $dates = ['deleted_at'];
 
-    public function hasLoans()
+    public function prestamos()
     {
-        return $this->hasMany('App\Models\Prestamo', 'periodo_prestamo_id');
+        return $this->hasMany('App\Models\Prestamo', 'periodo_prestamo_id', 'id');
     }
 
 }

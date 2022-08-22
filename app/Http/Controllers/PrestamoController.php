@@ -23,7 +23,7 @@ class PrestamoController extends Controller
   public function index()
   {
     $user = Auth::user();
-    $prestamos = Prestamo::where('usuario_creador', $user->email)->get();
+    $prestamos = Prestamo::with(['cliente', 'periodo'])->where('usuario_creador', $user->email)->get();
     return view('prestamos.index', ['prestamos' => $prestamos]);
   }
 
@@ -135,7 +135,7 @@ class PrestamoController extends Controller
       $cuota->valor_cuota = (($prestamo->valor_prestamo/$prestamo->cuotas)+(($prestamo->valor_prestamo/$prestamo->cuotas)*($prestamo->tasa_interes/100)));
       $cuota->fecha_inicio_prestamo = $prestamo->fecha_inicio_prestamo;
       $cuota->fecha_pago_programado = $fecha_pago;
-      $cuota->created_at = date("Y-m-d");
+      $cuota->created_at = date("Y-m-d H:i");
       $cuota->usuario_creador = $user->email;
       $cuota->save();
       $fecha_pago = $this->getDateCuota($fecha_pago, $prestamo->periodo_prestamo_id);
@@ -145,9 +145,9 @@ class PrestamoController extends Controller
     if(is_null($cliente_imagenes)){
       $cliente_imagenes = new ClienteImagenes;
       $cliente_imagenes->cliente_id = $cliente->id;
-      $cliente_imagenes->created_at = date("Y-m-d");
+      $cliente_imagenes->created_at = date("Y-m-d H:i");
     }
-    $cliente_imagenes->updated_at = date("Y-m-d");
+    $cliente_imagenes->updated_at = date("Y-m-d H:i");
     if ($request->hasFile('cedula-frontal')) {
       $ID_front = $request->file('cedula-frontal')->storeAs('fotos_prestamos', $cliente->id.'-cedula-frontal.jpg');
       $cliente_imagenes->ID_front = $ID_front;

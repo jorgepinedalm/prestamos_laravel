@@ -20,7 +20,7 @@ class Cliente extends Model
         return $this->hasMany('App\Models\ClienteImagenes', 'cliente_id');
     }
 
-    public function hasLoans()
+    public function prestamos()
     {
         return $this->hasMany('App\Models\Prestamo', 'cliente_id');
     }

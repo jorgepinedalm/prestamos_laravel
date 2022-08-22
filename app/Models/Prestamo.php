@@ -15,9 +15,10 @@ class Prestamo extends Model
 
     protected $dates = ['deleted_at'];
 
-    public function hasCustomer()
+    public function cliente()
     {
-        return $this->hasOne('App\Models\Cliente', 'id');
+        return $this->belongsTo(Cliente::class);
+        //return $this->hasOne('App\Models\Cliente', 'id');
     }
 
     public function hasStates()
@@ -25,9 +26,10 @@ class Prestamo extends Model
         return $this->hasMany('App\Models\PrestamoEstadoPrestamo', 'prestamo_id');
     }
 
-    public function hasPeriod()
+    public function periodo()
     {
-        return $this->hasOne('App\Models\PeriodoPrestamo', 'id');
+        return $this->belongsTo(PeriodoPrestamo::class, 'periodo_prestamo_id');
+        //return $this->hasOne('App\Models\PeriodoPrestamo', 'id');
     }
 
 }
