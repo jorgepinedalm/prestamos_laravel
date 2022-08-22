@@ -18,7 +18,7 @@ class Cobrador extends Model
     public function user()
     {
         //return $this->belongsTo(User::class);
-        return $this->hasOne('App\Models\User', 'id');
+        return $this->hasOne('App\Models\User','id','user_id');
     }
 
 }

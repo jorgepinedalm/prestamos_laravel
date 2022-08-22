@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\PrestamoCuota;
+use App\Models\Cobrador;
 
 class PrestamoCuotaController extends Controller 
 {
@@ -15,9 +16,10 @@ class PrestamoCuotaController extends Controller
    */
   public function index(Request $request)
   {
-    $cuotas = PrestamoCuota::with(['cliente','periodo','estado'])->where('prestamo_id', $request->get('prestamo'))->get();
+    $cuotas = PrestamoCuota::with(['cliente','periodo','estado','prestamo'])->where('prestamo_id', $request->get('prestamo'))->get();
     $cliente = $cuotas[0]->cliente;
-    return view('plan-pagos.index', ['cuotas' => $cuotas, 'cliente' => $cliente]);
+    $cobrador = Cobrador::with('user')->where('user_id', $cuotas[0]->prestamo->cobrador_id)->first();
+    return view('plan-pagos.index', ['cuotas' => $cuotas, 'cliente' => $cliente, 'cobrador' => $cobrador]);
   }
 
   /**

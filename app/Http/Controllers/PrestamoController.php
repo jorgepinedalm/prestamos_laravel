@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Auth;
 
 use App\Models\Cliente;
+use App\Models\Cobrador;
 use App\Models\Prestamo;
 use App\Models\PeriodoPrestamo;
 use App\Models\ClienteImagenes;
@@ -36,7 +37,8 @@ class PrestamoController extends Controller
   {
     $cliente = Cliente::where('identificacion', $request->get('identificacion'))->first();
     $periodos = PeriodoPrestamo::all();
-    return view('prestamos.create', ['cliente' => $cliente, 'periodos' => $periodos]);
+    $cobradores = Cobrador::with('user')->get();
+    return view('prestamos.create', ['cliente' => $cliente, 'periodos' => $periodos, 'cobradores' => $cobradores]);
   }
 
   /**
@@ -71,6 +73,7 @@ class PrestamoController extends Controller
       'address' => 'required|max:255',
       'sex' => 'required',
       'birthdate' => 'required',
+      'cobrador' => 'exists:cobrador,user_id',
       'valor' => 'required|numeric|min:0',
       'interes' => 'required|numeric|min:0',
       'cuotas' => 'required|numeric|min:0',
@@ -106,6 +109,7 @@ class PrestamoController extends Controller
     $prestamo = new Prestamo;
     $prestamo->user_id = $user->id;
     $prestamo->cliente_id = $cliente->id;
+    $prestamo->cobrador_id = $request->get('cobrador');
     $prestamo->valor_prestamo = $request->get('valor');
     $prestamo->tasa_interes = $request->get('interes');
     $prestamo->cuotas = $request->get('cuotas');
@@ -119,7 +123,7 @@ class PrestamoController extends Controller
     $prestamo->save();
 
     
-    $fecha_inicio = date("Y-m-d");
+    $fecha_inicio = date("Y-m-d", strtotime($request->get('inicio_prestamo')));
     $fecha_pago = $this->getDateCuota($fecha_inicio, $prestamo->periodo_prestamo_id);
     for($i = 0; $i < $prestamo->cuotas; $i++){
       $cuota = new PrestamoCuota;

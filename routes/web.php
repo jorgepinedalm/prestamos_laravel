@@ -6,6 +6,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\ClienteController;
 use App\Http\Controllers\PrestamoController;
 use App\Http\Controllers\PrestamoCuotaController;
+use App\Http\Controllers\DashboardController;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,9 +23,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth'])->name('dashboard');
+Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth'])->name('dashboard');
 
 Route::get('/usuarios', [UserController::class, 'index'])->middleware(['auth'])->name('usuarios');
 Route::get('/clientes', [ClienteController::class, 'index'])->middleware(['auth'])->name('clientes');
@@ -32,4 +31,5 @@ Route::get('/prestamos', [PrestamoController::class, 'index'])->middleware(['aut
 Route::get('/prestamos/create', [PrestamoController::class, 'create'])->middleware(['auth'])->name('prestamosCreate');
 Route::post('/prestamos/store', [PrestamoController::class, 'store'])->middleware(['auth'])->name('prestamosStore');
 Route::get('/plan-pagos', [PrestamoCuotaController::class, 'index'])->middleware(['auth'])->name('planPagos');
+Route::get('/registrar-pago', [PrestamoCuotaController::class, 'create'])->middleware(['auth'])->name('planPagosCreate');
 require __DIR__.'/auth.php';

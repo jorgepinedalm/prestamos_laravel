@@ -95,6 +95,15 @@
                 <div id="info-prestamo" class="w-full md:w-1/2 mx-auto rounded-md border shadow-sm bg-white p-3">
                     <p class="mb-3">Ingrese la información del prestamo</p>
                     <div class="field pb-3">
+                        <label for="cobrador" class="block text-sm font-bold">Cobrador</label>
+                        <select id="cobrador" name="cobrador" class="rounded w-full" required>
+                            <option value="" selected disabled>Seleccione un periodo</option>
+                            @foreach ($cobradores as $cobrador)
+                                <option value="{{$cobrador->user_id}}">{{$cobrador->user->name}}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="field pb-3">
                         <label for="valor" class="block text-sm font-bold">Valor a prestar</label>
                         <input type="text" id="valor" name="valor" class="rounded w-full" placeholder="Ej: 100.000 (solo números)" onkeypress="return isNumber(event)" onkeyup="currencyFormat(event)" maxlength="12" autocomplete="off" required>
                     </div>

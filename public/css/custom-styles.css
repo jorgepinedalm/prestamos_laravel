@@ -106,3 +106,12 @@ input[readonly] {
     background: #EEEEEE;
     cursor: not-allowed;
 }
+.style-propagate-children td{
+    background-color: inherit;
+}
+.red-alarm{
+    background-color: rgb(254 226 226);
+}
+.warning-alarm{
+    background-color: rgb(254 249 195);
+}
