@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ClienteController;
 use App\Http\Controllers\PrestamoController;
+use App\Http\Controllers\PrestamoCuotaController;
 
 /*
 |--------------------------------------------------------------------------
@@ -30,5 +31,5 @@ Route::get('/clientes', [ClienteController::class, 'index'])->middleware(['auth'
 Route::get('/prestamos', [PrestamoController::class, 'index'])->middleware(['auth'])->name('prestamos');
 Route::get('/prestamos/create', [PrestamoController::class, 'create'])->middleware(['auth'])->name('prestamosCreate');
 Route::post('/prestamos/store', [PrestamoController::class, 'store'])->middleware(['auth'])->name('prestamosStore');
-
+Route::get('/plan-pagos', [PrestamoCuotaController::class, 'index'])->middleware(['auth'])->name('planPagos');
 require __DIR__.'/auth.php';

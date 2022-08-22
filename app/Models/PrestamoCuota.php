@@ -15,19 +15,27 @@ class PrestamoCuota extends Model
 
     protected $dates = ['deleted_at'];
 
-    public function hasCustomer()
+    public function cliente()
     {
-        return $this->hasOne('App\Models\Cliente', 'id');
+        return $this->belongsTo(Cliente::class);
+        //return $this->hasOne('App\Models\Cliente', 'id');
     }
 
-    public function hasLoan()
+    public function prestamo()
     {
         return $this->hasOne('App\Models\Prestamo', 'id');
     }
 
-    public function hasPeriod()
+    public function estado()
     {
-        return $this->hasOne('App\Models\PeriodoPrestamo', 'id');
+        return $this->belongsTo(EstadoPrestamoCuota::class);
+        //return $this->hasOne('App\Models\Cliente', 'id');
+    }
+
+    public function periodo()
+    {
+        return $this->belongsTo(PeriodoPrestamo::class);
+        //return $this->hasOne('App\Models\PeriodoPrestamo', 'id');
     }
 
     public function hasUser()
