@@ -28,13 +28,13 @@ class PrestamoCuota extends Model
 
     public function estado()
     {
-        return $this->belongsTo(EstadoPrestamoCuota::class);
+        return $this->belongsTo(EstadoPrestamoCuota::class, 'estado_prestamo_cuota_id');
         //return $this->hasOne('App\Models\Cliente', 'id');
     }
 
     public function periodo()
     {
-        return $this->belongsTo(PeriodoPrestamo::class);
+        return $this->belongsTo(PeriodoPrestamo::class, 'periodo_prestamo_id');
         //return $this->hasOne('App\Models\PeriodoPrestamo', 'id');
     }
 

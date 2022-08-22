@@ -14,6 +14,7 @@
                         <th scope="col" class="px-6 py-3">Fecha programada de pago</th>
                         <th scope="col" class="px-6 py-3">Fecha de pago</th>
                         <th scope="col" class="px-6 py-3">Valor de cuota</th>
+                        <th scope="col" class="px-6 py-3">Valor pagado</th>
                         <th scope="col" class="px-6 py-3">Estado</th>
                         <th scope="col" class="px-6 py-3">Acciones</th>
                     </tr>
@@ -26,6 +27,7 @@
                         <td class="px-6 py-3">{{date('d/m/Y', strtotime($cuota->fecha_pago_programado))}}</td>
                         <td class="px-6 py-3">{{$cuota->fecha_pago}}</td>
                         <td class="px-6 py-3">{{number_format($cuota->valor_cuota,0)}}</td>
+                        <td class="px-6 py-3">{{number_format($cuota->valor_pagado,0)}}</td>
                         <td class="px-6 py-3">{{$cuota->estado->descripcion}}</td>
                         <td class="px-6 py-3">
                         

@@ -19,6 +19,7 @@ class CreatePrestamoCuotaTable extends Migration {
 			$table->float('valor_prestamo');
 			$table->float('tasa_interes');
 			$table->float('valor_cuota');
+			$table->float('valor_pagado');
 			$table->integer('cuotas');
 			$table->datetime('fecha_pago_cuota')->nullable();
 			$table->datetime('fecha_pago_programado');

@@ -23,10 +23,10 @@
                     <tr>
                         <td class="px-6 py-3">{{$prestamo->id}}</td>
                         <td class="px-6 py-3">{{$prestamo->cliente->nombres}} {{$prestamo->cliente->lastname}}</td>
-                        <td class="px-6 py-3">{{$prestamo->valor_prestamo}}</td>
+                        <td class="px-6 py-3">{{number_format($prestamo->valor_prestamo, 0)}}</td>
                         <td class="px-6 py-3">{{$prestamo->cuotas}}</td>
                         <td class="px-6 py-3">{{$prestamo->periodo->descripcion}}</td>
-                        <td class="px-6 py-3">{{$prestamo->created_at}}</td>
+                        <td class="px-6 py-3">{{date('d/m/Y', strtotime($prestamo->created_at))}}</td>
                         <td class="px-6 py-3">
                         
                             <a href="/plan-pagos?prestamo={{$prestamo->id}}" title="Ver plan de pagos">
