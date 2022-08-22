@@ -13,6 +13,7 @@ class CreatePrestamoTable extends Migration {
 			$table->softDeletes();
 			$table->bigInteger('user_id')->unsigned();
 			$table->bigInteger('cliente_id')->unsigned();
+			$table->bigInteger('cobrador_id')->unsigned()->nullable();
 			$table->float('valor_prestamo');
 			$table->float('tasa_interes');
 			$table->integer('cuotas');

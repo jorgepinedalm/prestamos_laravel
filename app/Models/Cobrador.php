@@ -15,8 +15,9 @@ class Cobrador extends Model
 
     protected $dates = ['deleted_at'];
 
-    public function hasUser()
+    public function user()
     {
+        //return $this->belongsTo(User::class);
         return $this->hasOne('App\Models\User', 'id');
     }
 

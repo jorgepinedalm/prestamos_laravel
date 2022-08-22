@@ -23,6 +23,11 @@ class CreateForeignKeys extends Migration {
 						->onDelete('restrict')
 						->onUpdate('restrict');
 		});
+		Schema::table('prestamo', function(Blueprint $table) {
+			$table->foreign('cobrador_id')->references('user_id')->on('cobrador')
+						->onDelete('restrict')
+						->onUpdate('restrict');
+		});
 		Schema::table('cliente_imagenes', function(Blueprint $table) {
 			$table->foreign('cliente_id')->references('id')->on('cliente')
 						->onDelete('restrict')
@@ -95,6 +100,9 @@ class CreateForeignKeys extends Migration {
 		});
 		Schema::table('prestamo', function(Blueprint $table) {
 			$table->dropForeign('prestamo_periodo_prestamo_id_foreign');
+		});
+		Schema::table('prestamo', function(Blueprint $table) {
+			$table->dropForeign('prestamo_cobrado_id_foreign');
 		});
 		Schema::table('cliente_imagenes', function(Blueprint $table) {
 			$table->dropForeign('cliente_imagenes_cliente_id_foreign');
