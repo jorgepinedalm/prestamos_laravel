@@ -58,6 +58,31 @@ class CreateForeignKeys extends Migration {
 						->onDelete('restrict')
 						->onUpdate('restrict');
 		});
+		Schema::table('prestamo_cuota', function(Blueprint $table) {
+			$table->foreign('cliente_id')->references('id')->on('cliente')
+						->onDelete('restrict')
+						->onUpdate('restrict');
+		});
+		Schema::table('prestamo_cuota', function(Blueprint $table) {
+			$table->foreign('prestamo_id')->references('id')->on('prestamo')
+						->onDelete('restrict')
+						->onUpdate('restrict');
+		});
+		Schema::table('prestamo_cuota', function(Blueprint $table) {
+			$table->foreign('estado_prestamo_cuota_id')->references('id')->on('estado_prestamo_cuota')
+						->onDelete('restrict')
+						->onUpdate('restrict');
+		});
+		Schema::table('prestamo_cuota', function(Blueprint $table) {
+			$table->foreign('periodo_prestamo_id')->references('id')->on('periodo_prestamo')
+						->onDelete('restrict')
+						->onUpdate('restrict');
+		});
+		Schema::table('prestamo_cuota', function(Blueprint $table) {
+			$table->foreign('user_id')->references('id')->on('users')
+						->onDelete('restrict')
+						->onUpdate('restrict');
+		});
 	}
 
 	public function down()
@@ -91,6 +116,21 @@ class CreateForeignKeys extends Migration {
 		});
 		Schema::table('tarjeta', function(Blueprint $table) {
 			$table->dropForeign('tarjeta_estado_tarjeta_id_foreign');
+		});
+		Schema::table('prestamo_cuota', function(Blueprint $table) {
+			$table->dropForeign('prestamo_cuota_cliente_id_foreign');
+		});
+		Schema::table('prestamo_cuota', function(Blueprint $table) {
+			$table->dropForeign('prestamo_cuota_prestamo_id_foreign');
+		});
+		Schema::table('prestamo_cuota', function(Blueprint $table) {
+			$table->dropForeign('prestamo_cuota_estado_prestamo_cuota_id_foreign');
+		});
+		Schema::table('prestamo_cuota', function(Blueprint $table) {
+			$table->dropForeign('prestamo_cuota_periodo_prestamo_id_foreign');
+		});
+		Schema::table('prestamo_cuota', function(Blueprint $table) {
+			$table->dropForeign('prestamo_cuota_user_id_foreign');
 		});
 	}
 }

@@ -18,6 +18,34 @@ class DatabaseSeeder extends Seeder
     {
         // \App\Models\User::factory(10)->create();
 
+        DB::table('periodo_prestamo')->insert([
+            'descripcion' => 'Diario'
+        ]);
+
+        DB::table('periodo_prestamo')->insert([
+            'descripcion' => 'Semanal'
+        ]);
+
+        DB::table('periodo_prestamo')->insert([
+            'descripcion' => 'Quincenal'
+        ]);
+
+        DB::table('periodo_prestamo')->insert([
+            'descripcion' => 'Mensual'
+        ]);
+
+        DB::table('estado_prestamo_cuota')->insert([
+            'descripcion' => 'Programado'
+        ]);
+
+        DB::table('estado_prestamo_cuota')->insert([
+            'descripcion' => 'Pagado'
+        ]);
+
+        DB::table('estado_prestamo_cuota')->insert([
+            'descripcion' => 'No pagado'
+        ]);
+
         DB::table('users')->insert([
             'name' => 'admin',
             'email' => 'admin@gmail.com',

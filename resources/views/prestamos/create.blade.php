@@ -13,6 +13,17 @@
         </ul>
     </div>
 
+    @if ($errors->any())
+        <div class="alert alert-danger">
+            <strong>Whoops!</strong> There were some problems with your input.<br><br>
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+
     <form id="form-create" method="POST" action="/prestamos/store" enctype="multipart/form-data">
     @csrf
 
@@ -30,11 +41,11 @@
                     <div class="columns-1 lg:columns-2">
                         <div class="field pb-3">
                             <label for="firstname" class="block text-sm font-bold">Nombres</label>
-                            <input type="text" id="firstname" name="firstname" class="rounded w-full" @if(isset($cliente)) disabled value="{{$cliente->nombres}}" @endif placeholder="Ingrese los nombres del cliente" maxlength="255" autocomplete="off" required>
+                            <input type="text" id="firstname" name="nombres" class="rounded w-full" @if(isset($cliente)) readonly value="{{$cliente->nombres}}" @endif placeholder="Ingrese los nombres del cliente" maxlength="255" autocomplete="off" required>
                         </div>
                         <div class="field pb-3">
                             <label for="lastname" class="block text-sm font-bold">Apellidos</label>
-                            <input type="text" id="lastname" name="lastname" class="rounded w-full" @if(isset($cliente)) disabled value="{{$cliente->lastname}}" @endif placeholder="Ingrese los apellidos del cliente" maxlength="255" autocomplete="off" required>
+                            <input type="text" id="lastname" name="lastname" class="rounded w-full" @if(isset($cliente)) readonly value="{{$cliente->lastname}}" @endif placeholder="Ingrese los apellidos del cliente" maxlength="255" autocomplete="off" required>
                         </div>
                     </div>
 
@@ -52,7 +63,7 @@
                     <div class="columns-1 lg:columns-2">
                         <div class="field pb-3">
                             <label for="birthdate" class="block text-sm font-bold">Fecha de nacimiento</label>
-                            <input type="date" id="birthdate" name="birthdate" class="rounded w-full" placeholder="dd/mm/yyyy" @if(isset($cliente)) value="{{$cliente->birthdate}}" disabled @endif maxlength="16" required>
+                            <input type="date" id="birthdate" name="birthdate" class="rounded w-full" placeholder="dd/mm/yyyy" @if(isset($cliente)) value="{{$cliente->birthdate}}" readonly @endif maxlength="16" required>
                         </div>
                         <div class="field pb-3">
                             <label for="sex" class="block text-sm font-bold">Sexo</label>
@@ -89,8 +100,13 @@
                     </div>
                     <div class="columns-1 md:columns-2">
                         <div class="field pb-3">
-                            <label for="interes" class="block text-sm font-bold">Tasa de interés</label>
-                            <input type="number" id="interes" name="interes" class="rounded w-full" placeholder="Ej: 5% (solo números)" maxlength="5" min="0" max="100" step=".1" autocomplete="off" required>
+                            <label for="periodo" class="block text-sm font-bold">Periodo de prestamo</label>
+                            <select id="periodo" name="periodo" class="rounded w-full" required>
+                                <option value="" selected disabled>Seleccione un periodo</option>
+                                @foreach ($periodos as $periodo)
+                                    <option value="{{$periodo->id}}">{{$periodo->descripcion}}</option>
+                                @endforeach
+                            </select>
                         </div>
                         <div class="field pb-3">
                             <label for="cuotas" class="block text-sm font-bold">Cantidad de cuotas</label>
@@ -99,13 +115,8 @@
                     </div>
                     <div class="columns-1 md:columns-2">
                         <div class="field pb-3">
-                            <label for="periodo" class="block text-sm font-bold">Periodo de prestamo</label>
-                            <select id="periodo" name="periodo" class="rounded w-full" required>
-                                <option value="" selected disabled>Seleccione un periodo</option>
-                                @foreach ($periodos as $periodo)
-                                    <option value="{{$periodo->id}}">{{$periodo->descripcion}}</option>
-                                @endforeach
-                            </select>
+                            <label for="interes" class="block text-sm font-bold">Tasa de interés</label>
+                            <input type="number" id="interes" name="interes" class="rounded w-full" placeholder="Ej: 5% (solo números)" maxlength="5" min="0" max="100" step=".1" autocomplete="off" required>
                         </div>
                         <div class="field pb-3">
                             <label for="inicio_prestamo" class="block text-sm font-bold">Fecha de inicio de prestamo</label>
@@ -126,7 +137,7 @@
                                 <input class="form-control block w-full px-3 py-1.5 text-base font-normal
                                 text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300
                                 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none" 
-                                type="file" id="cedula-frontal" name="cedula-frontal" capture accept="image/*">
+                                type="file" id="cedula-frontal" name="cedula-frontal" capture accept="image/*" required>
                             </div>
                         </div>    
                     </div>
@@ -137,7 +148,7 @@
                                 <input class="form-control block w-full px-3 py-1.5 text-base font-normal
                                 text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300
                                 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none" 
-                                type="file" id="cedula-trasera" name="cedula-trasera" capture accept="image/*">
+                                type="file" id="cedula-trasera" name="cedula-trasera" capture accept="image/*" required>
                             </div>
                         </div>    
                     </div>
@@ -148,7 +159,7 @@
                                 <input class="form-control block w-full px-3 py-1.5 text-base font-normal
                                 text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300
                                 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none" 
-                                type="file" id="foto-cliente" name="foto-cliente" capture accept="image/*">
+                                type="file" id="foto-cliente" name="foto-cliente" capture accept="image/*" required>
                             </div>
                         </div>    
                     </div>
@@ -159,7 +170,7 @@
                                 <input class="form-control block w-full px-3 py-1.5 text-base font-normal
                                 text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300
                                 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none" 
-                                type="file" id="foto-vivienda" name="foto-vivienda" capture accept="image/*">
+                                type="file" id="foto-vivienda" name="foto-vivienda" capture accept="image/*" required>
                             </div>
                         </div>    
                     </div>

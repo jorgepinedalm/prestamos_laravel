@@ -4,6 +4,6 @@
             {{ __('Prestamos realizados') }}
         </h2>
     </x-slot>
-    
+    {{$prestamos}}
     
 </x-app-layout>
