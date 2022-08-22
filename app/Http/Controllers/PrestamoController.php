@@ -3,11 +3,14 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Auth;
 
 use App\Models\Cliente;
 use App\Models\Prestamo;
 use App\Models\PeriodoPrestamo;
 use App\Models\ClienteImagenes;
+use App\Models\PrestamoCuota;
+use App\Models\EstadoPrestamoCuota;
 
 class PrestamoController extends Controller 
 {
@@ -19,7 +22,8 @@ class PrestamoController extends Controller
    */
   public function index()
   {
-    $prestamos = Prestamo::all();
+    $user = Auth::user();
+    $prestamos = Prestamo::where('usuario_creador', $user->email)->get();
     return view('prestamos.index', ['prestamos' => $prestamos]);
   }
 
@@ -55,6 +59,9 @@ class PrestamoController extends Controller
         ]
       );
     }
+    $request->merge([
+      'valor' => str_replace(",", "", $request->get('valor')),
+    ]);
     $request->validate([
       'nombres' => 'required|max:255',
       'lastname' => 'required|max:255',
@@ -74,9 +81,8 @@ class PrestamoController extends Controller
       'foto-cliente' => 'required|mimes:jpg,jpeg,png|max:4096',
       'foto-vivienda' => 'required|mimes:jpg,jpeg,png|max:4096',
     ]);
-    dd($request);
 
-    $cliente = $cliente::Where('identificacion', $request->get('identificacion'))->first();
+    $cliente = Cliente::Where('identificacion', $request->get('identificacion'))->first();
     if(is_null($cliente)){
       $cliente = new Cliente;
       $cliente->identificacion = $request->get('identificacion');
@@ -88,24 +94,52 @@ class PrestamoController extends Controller
     $cliente->cellphone = $request->get('cellphone');
     $cliente->phone = $request->get('phone');
     $cliente->address = $request->get('address');
+    $cliente->sex = $request->get('sex');
     $cliente->state = 1;
-    $cliente->created_at = date("Y-m-d");
-    $cliente->updated_at = date("Y-m-d");
+    $cliente->created_at = date("Y-m-d H:i");
+    $cliente->updated_at = date("Y-m-d H:i");
 
     $cliente->save();
 
+    $user = Auth::user();
+
     $prestamo = new Prestamo;
+    $prestamo->user_id = $user->id;
     $prestamo->cliente_id = $cliente->id;
     $prestamo->valor_prestamo = $request->get('valor');
-    $prestamo->interes = $request->get('interes');
-    $prestamo->cuotas = $request->get('cuota');
+    $prestamo->tasa_interes = $request->get('interes');
+    $prestamo->cuotas = $request->get('cuotas');
     $prestamo->fecha_inicio_prestamo = $request->get('inicio_prestamo');
     $prestamo->fecha_prestamo = date("Y-m-d");
     $prestamo->periodo_prestamo_id = $request->get('periodo');
-    $prestamo->created_at = date("Y-m-d");
-    $prestamo->updated_at = date("Y-m-d");
+    $prestamo->created_at = date("Y-m-d H:i");
+    $prestamo->updated_at = date("Y-m-d H:i");
+    $prestamo->usuario_creador = $user->email;
 
     $prestamo->save();
+
+    
+    $fecha_inicio = date("Y-m-d");
+    $fecha_pago = $this->getDateCuota($fecha_inicio, $prestamo->periodo_prestamo_id);
+    for($i = 0; $i < $prestamo->cuotas; $i++){
+      $cuota = new PrestamoCuota;
+      $cuota->cliente_id = $cliente->id;
+      $cuota->prestamo_id = $prestamo->id;
+      $cuota->periodo_prestamo_id = $prestamo->periodo_prestamo_id;
+      $cuota->user_id = $user->id;
+      $estado_cuota = EstadoPrestamoCuota::where('id',1)->first();
+      $cuota->estado_prestamo_cuota_id = $estado_cuota->id;
+      $cuota->valor_prestamo = $prestamo->valor_prestamo;
+      $cuota->tasa_interes = $prestamo->tasa_interes;
+      $cuota->cuotas = $prestamo->cuotas;
+      $cuota->valor_cuota = (($prestamo->valor_prestamo/$prestamo->cuotas)+(($prestamo->valor_prestamo/$prestamo->cuotas)*($prestamo->tasa_interes/100)));
+      $cuota->fecha_inicio_prestamo = $prestamo->fecha_inicio_prestamo;
+      $cuota->fecha_pago_programado = $fecha_pago;
+      $cuota->created_at = date("Y-m-d");
+      $cuota->usuario_creador = $user->email;
+      $cuota->save();
+      $fecha_pago = $this->getDateCuota($fecha_pago, $prestamo->periodo_prestamo_id);
+    }
 
     $cliente_imagenes = ClienteImagenes::Where('id', $cliente->id)->first();
     if(is_null($cliente_imagenes)){
@@ -115,25 +149,48 @@ class PrestamoController extends Controller
     }
     $cliente_imagenes->updated_at = date("Y-m-d");
     if ($request->hasFile('cedula-frontal')) {
-      $ID_front = $request->photo->storeAs('fotos_prestamos', $cliente->id.'-cedula-frontal.jpg');
+      $ID_front = $request->file('cedula-frontal')->storeAs('fotos_prestamos', $cliente->id.'-cedula-frontal.jpg');
       $cliente_imagenes->ID_front = $ID_front;
     }
     if ($request->hasFile('cedula-trasera')) {
-      $ID_back = $request->photo->storeAs('fotos_prestamos', $cliente->id.'-cedula-trasera.jpg');
+      $ID_back = $request->file('cedula-trasera')->storeAs('fotos_prestamos', $cliente->id.'-cedula-trasera.jpg');
       $cliente_imagenes->ID_back = $ID_back;
     }
     if ($request->hasFile('foto-cliente')) {
-      $person_photo = $request->photo->storeAs('fotos_prestamos', $cliente->id.'-foto-cliente.jpg');
+      $person_photo = $request->file('foto-cliente')->storeAs('fotos_prestamos', $cliente->id.'-foto-cliente.jpg');
       $cliente_imagenes->person_photo = $person_photo;
     }
     if ($request->hasFile('foto-vivienda')) {
-      $home_photo = $request->photo->storeAs('fotos_prestamos', $cliente->id.'-foto-vivienda.jpg');
+      $home_photo = $request->file('foto-vivienda')->storeAs('fotos_prestamos', $cliente->id.'-foto-vivienda.jpg');
       $cliente_imagenes->home_photo = $home_photo;
     }
     $cliente_imagenes->save();
 
-    return view('prestamos.index');
+    return redirect("/prestamos");
     
+  }
+
+  private function getDateCuota($date, $periodo_prestamo_id)
+  {
+    switch ($periodo_prestamo_id) {
+      case 1:
+        $date = date('Y-m-d', strtotime("+1 day", strtotime($date)));
+        break;
+      case 2:
+        $date = date('Y-m-d', strtotime("+7 day", strtotime($date)));
+        break;
+      case 3:
+        $date = date('Y-m-d', strtotime("+15 day", strtotime($date)));
+        break;
+      case 4:
+        $date = date('Y-m-d', strtotime("+30 day", strtotime($date)));
+        break;
+      
+      default:
+        $date = date('Y-m-d', strtotime("+1 day", strtotime($date)));
+        break;
+    }
+    return $date;
   }
 
   /**

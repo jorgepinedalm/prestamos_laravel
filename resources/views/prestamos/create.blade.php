@@ -52,11 +52,11 @@
                     <div class="columns-1 lg:columns-2">
                         <div class="field pb-3">
                             <label for="cellphone" class="block text-sm font-bold">Celular</label>
-                            <input type="tel" id="cellphone" name="cellphone" class="rounded w-full" @if(isset($cliente)) value="{{$cliente->cellphone}}" onkeypress="return isNumber(event)" @endif placeholder="Ej: 300 000 0000" maxlength="11" autocomplete="off" required>
+                            <input type="tel" id="cellphone" name="cellphone" class="rounded w-full" @if(isset($cliente)) value="{{$cliente->cellphone}}" onkeypress="return isNumber(event)" @endif placeholder="Ej: 300 000 0000" maxlength="10" autocomplete="off" required>
                         </div>
                         <div class="field pb-3">
                             <label for="phone" class="block text-sm font-bold">Teléfono</label>
-                            <input type="tel" id="phone" name="phone" class="rounded w-full" placeholder="Ej: 433 22 11" @if(isset($cliente)) value="{{$cliente->phone}}" onkeypress="return isNumber(event)" @endif maxlength="11" autocomplete="off">
+                            <input type="tel" id="phone" name="phone" class="rounded w-full" placeholder="Ej: 433 22 11" @if(isset($cliente)) value="{{$cliente->phone}}" onkeypress="return isNumber(event)" @endif maxlength="10" autocomplete="off">
                         </div>
                     </div>
 
@@ -69,13 +69,13 @@
                             <label for="sex" class="block text-sm font-bold">Sexo</label>
                             <div class="pt-3">
                                 <div class="inline-flex items-center mr-4 mb-3">
-                                    <input id="sex-m" type="radio" name="sex" class="hidden" @if(isset($cliente) && $cliente->sex == 1) checked @endif required/>
+                                    <input id="sex-m" type="radio" name="sex" value="1" class="hidden" @if(isset($cliente) && $cliente->sex == 1) checked @endif required/>
                                     <label for="sex-m" class="flex items-center cursor-pointer">
                                     <span class="w-4 h-4 inline-block mr-1 rounded-full border border-grey"></span>
                                     Masculino</label>
                                 </div>
                                 <div class="inline-flex items-center mr-4 mb-3">
-                                    <input id="sex-f" type="radio" name="sex" class="hidden" @if(isset($cliente) && $cliente->sex == 0) checked @endif required/>
+                                    <input id="sex-f" type="radio" name="sex" value="0" class="hidden" @if(isset($cliente) && $cliente->sex == 0) checked @endif required/>
                                     <label for="sex-f" class="flex items-center cursor-pointer">
                                     <span class="w-4 h-4 inline-block mr-1 rounded-full border border-grey"></span>
                                     Femenino</label>
