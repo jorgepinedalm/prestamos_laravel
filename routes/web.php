@@ -31,5 +31,6 @@ Route::get('/prestamos', [PrestamoController::class, 'index'])->middleware(['aut
 Route::get('/prestamos/create', [PrestamoController::class, 'create'])->middleware(['auth'])->name('prestamosCreate');
 Route::post('/prestamos/store', [PrestamoController::class, 'store'])->middleware(['auth'])->name('prestamosStore');
 Route::get('/plan-pagos', [PrestamoCuotaController::class, 'index'])->middleware(['auth'])->name('planPagos');
+Route::post('/plan-pagos/store', [PrestamoCuotaController::class, 'store'])->middleware(['auth'])->name('planPagosStore');
 Route::get('/registrar-pago', [PrestamoCuotaController::class, 'create'])->middleware(['auth'])->name('planPagosCreate');
 require __DIR__.'/auth.php';

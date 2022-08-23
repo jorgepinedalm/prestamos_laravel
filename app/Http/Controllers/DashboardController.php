@@ -15,6 +15,9 @@ class DashboardController extends Controller
   public function index()
   {
     $pagos = PrestamoCuota::with(['cliente', 'prestamo','periodo','estado'])->where('fecha_pago_programado', date('Y-m-d'))->get();
+    for($i = 0; $i < count($pagos); $i++){
+        $pagos[$i]->saldo = PrestamoCuota::where('prestamo_id', $pagos[$i]->prestamo_id)->where('estado_prestamo_cuota_id', 1)->sum('valor_cuota');
+    }
     return view('dashboard', ['pagos' => $pagos]);
   }
 }

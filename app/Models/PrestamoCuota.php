@@ -39,6 +39,12 @@ class PrestamoCuota extends Model
         //return $this->hasOne('App\Models\PeriodoPrestamo', 'id');
     }
 
+    public function medio_pago()
+    {
+        return $this->belongsTo(MedioPago::class, 'medio_pago_id');
+        //return $this->hasOne('App\Models\PeriodoPrestamo', 'id');
+    }
+
     public function hasUser()
     {
         return $this->hasOne('App\Models\User', 'id');

@@ -23,25 +23,25 @@
                             <table class="w-full bg-white text-sm text-left text-gray-500 dark:text-gray-400">
                                 <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                                     <tr>
-                                        <th scope="col" class="px-4 py-3">ID prestamo</th>
-                                        <th scope="col" class="px-6 py-3">Cliente</th>
-                                        <th scope="col" class="px-6 py-3">Periodo</th>
-                                        <th scope="col" class="px-6 py-3">Fecha de pago</th>
-                                        <th scope="col" class="px-6 py-3">Valor de cuota</th>
-                                        <th scope="col" class="px-6 py-3">Valor pagado</th>
-                                        <th scope="col" class="px-6 py-3">Estado</th>
-                                        <th scope="col" class="px-6 py-3">Acciones</th>
+                                        <th scope="col" class="px-2 py-3" style="width: 90px;"># Factura</th>
+                                        <th scope="col" class="px-2 py-3">Cliente</th>
+                                        <th scope="col" class="px-2 py-3">Periodo</th>
+                                        <th scope="col" class="px-2 py-3 text-center" style="width: 130px;">Valor de cuota</th>
+                                        <th scope="col" class="px-2 py-3 text-center" style="width: 130px;">Valor pagado</th>
+                                        <th scope="col" class="px-2 py-3 text-center" style="width: 130px;">Saldo</th>
+                                        <th scope="col" class="px-2 py-3" style="width: 100px;">Estado</th>
+                                        <th scope="col" class="px-2 py-3" style="width: 80px;min-width:80px;">Acciones</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @foreach($pagos as $pago)
                                         <tr>
-                                            <td class="p-2"><a href="/plan-pagos?prestamo={{$pago->prestamo->id}}">{{$pago->prestamo->id}}</a></td>
+                                            <td class="p-2"><a href="/plan-pagos?prestamo={{$pago->prestamo->id}}">{{str_pad($pago->prestamo->id, 8, "0", STR_PAD_LEFT )}}</a></td>
                                             <td class="p-2">{{$pago->cliente->nombres}} {{$pago->cliente->lastname}}</td>
                                             <td class="p-2">{{$pago->periodo->descripcion}}</td>
-                                            <td class="p-2">{{date('d/m/Y', strtotime($pago->fecha_pago_programado))}}</td>
-                                            <td class="p-2">${{number_format($pago->valor_cuota,0)}}</td>
-                                            <td class="p-2">${{number_format($pago->valor_pagado,0)}}</td>
+                                            <td class="p-2 text-right">${{number_format($pago->valor_cuota,0)}}</td>
+                                            <td class="p-2 text-right">${{number_format($pago->valor_pagado,0)}}</td>
+                                            <td class="p-2 text-right">${{number_format($pago->saldo,0)}}</td>
                                             <td class="p-2">{{$pago->estado->descripcion}}</td>
                                             <td class="p-2 text-center">
                                                 <a href="#" class="bg-white border border-slate-600 text-slate-600 mr-2 p-1 rounded shadow-md" title="Ver más información">
@@ -49,7 +49,7 @@
                                                     <span class="sr-only">Ver más información</span>
                                                 </a>
                                                 @if($pago->estado_prestamo_cuota_id != 2)
-                                                    <a href="#" class="bg-white border border-green-600 text-green-600 p-1 rounded shadow-md" title="Registrar pago">
+                                                    <a href="/registrar-pago?cuota={{$pago->id}}" class="bg-white border border-green-600 text-green-600 p-1 rounded shadow-md" title="Registrar pago">
                                                         <span class="fas fa-hand-holding-usd" aria-hidden="true"></span>
                                                         <span class="sr-only">Registrar pago</span>
                                                     </a>

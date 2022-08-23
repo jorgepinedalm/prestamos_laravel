@@ -16,6 +16,7 @@ class CreatePrestamoCuotaTable extends Migration {
 			$table->bigInteger('prestamo_id')->unsigned();
 			$table->bigInteger('estado_prestamo_cuota_id')->unsigned();
 			$table->bigInteger('periodo_prestamo_id')->unsigned();
+			$table->bigInteger('medio_pago_id')->unsigned()->nullable();
 			$table->float('valor_prestamo');
 			$table->float('tasa_interes');
 			$table->float('valor_cuota');

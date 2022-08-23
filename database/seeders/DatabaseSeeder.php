@@ -46,6 +46,14 @@ class DatabaseSeeder extends Seeder
             'descripcion' => 'No pagado'
         ]);
 
+        DB::table('medio_pago')->insert([
+            'descripcion' => 'Efectivo'
+        ]);
+
+        DB::table('medio_pago')->insert([
+            'descripcion' => 'Nequi'
+        ]);
+
         DB::table('users')->insert([
             'name' => 'admin',
             'email' => 'admin@gmail.com',

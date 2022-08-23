@@ -97,7 +97,7 @@
                     <div class="field pb-3">
                         <label for="cobrador" class="block text-sm font-bold">Cobrador</label>
                         <select id="cobrador" name="cobrador" class="rounded w-full" required>
-                            <option value="" selected disabled>Seleccione un periodo</option>
+                            <option value="" selected disabled>Seleccione un cobrador</option>
                             @foreach ($cobradores as $cobrador)
                                 <option value="{{$cobrador->user_id}}">{{$cobrador->user->name}}</option>
                             @endforeach
