@@ -17,7 +17,11 @@
             </div>
             <div class="pb-6 overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="bg-white border-b border-gray-200 p-6">
+                    @if(@Auth::user()->hasRole('admin'))
                     <h3 class="text-gray-800 font-bold">Cobros del día de hoy ({{date('d/m/Y')}})</h3>
+                    @elseif(@Auth::user()->hasRole('cobrador'))
+                    <h3 class="text-gray-800 font-bold">Mis cobros del día ({{date('d/m/Y')}})</h3>
+                    @endif
                     @if(count($pagos) > 0)
                         <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
                             <table class="w-full bg-white text-sm text-left text-gray-500 dark:text-gray-400">
@@ -69,20 +73,24 @@
             </div>
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 bg-white border-b border-gray-200">
-                    <p>Bienvenido, admin</p>
+                    <p>Bienvenido, {{@Auth::user()->name}}</p>
                     <div class="access-cards flex flex-wrap">
+                        @if(@Auth::user()->hasPermissionTo('ver usuarios'))
                         <div class="access h-full w-full sm:w-1/2 md:w-1/4 lg:w-1/6 p-1">
                             <div class="relative text-center p-1 py-2 rounded shadow-md border-l-4 border-red-300 hover:shadow-lg hover:bg-red-300 text-red-800 cursor-pointer">
                                 <span class="fa-solid fa-users block text-4xl" aria-hidden="true"></span>
                                 <a href="/usuarios" class="stretched-link">Usuarios</a>
                             </div>
                         </div>
+                        @endif
+                        @if(@Auth::user()->hasPermissionTo('ver cobradores'))
                         <div class="access h-full w-full sm:w-1/2 md:w-1/4 lg:w-1/6 p-1">
                             <div class="text-center p-1 py-2 rounded shadow-md hover:shadow-lg hover:bg-sky-300 text-sky-800 cursor-pointer">
                                 <span class="fa-solid fa-hand-holding-dollar block text-4xl" aria-hidden="true"></span>
                                 <a href="#">Cobradores</a>
                             </div>
                         </div>
+                        @endif
                         <div class="access h-full w-full sm:w-1/2 md:w-1/4 lg:w-1/6 p-1">
                             <div class="relative text-center p-1 py-2 rounded shadow-md hover:shadow-lg hover:bg-green-300 text-green-800 cursor-pointer">
                                 <span class="fa-solid fa-handshake-simple block text-4xl" aria-hidden="true"></span>
@@ -92,7 +100,12 @@
                         <div class="access h-full w-full sm:w-1/2 md:w-1/4 lg:w-1/6 p-1">
                             <div class="relative text-center p-1 py-2 rounded shadow-md hover:shadow-lg hover:bg-cyan-300 text-cyan-800 cursor-pointer">
                                 <span class="fa-solid fa-money-bill-transfer block text-4xl" aria-hidden="true"></span>
+                                @if(@Auth::user()->hasRole('cobrador'))
+                                <a href="/prestamos?cobrador={{@Auth::user()->id}}" class="stretched-link">Prestamos</a>
+                                @else
                                 <a href="/prestamos" class="stretched-link">Prestamos</a>
+                                @endif
+                                
                             </div>
                         </div>
                         <div class="access h-full w-full sm:w-1/2 md:w-1/4 lg:w-1/6 p-1">

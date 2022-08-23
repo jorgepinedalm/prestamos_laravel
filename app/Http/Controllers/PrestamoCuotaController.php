@@ -21,7 +21,16 @@ class PrestamoCuotaController extends Controller
     $cliente = $cuotas->get()[0]->cliente;
     $cobrador = Cobrador::with('user')->where('user_id', $cuotas->get()[0]->prestamo->cobrador_id)->first();
     $saldo = $cuotas->where('estado_prestamo_cuota_id', 1)->sum('valor_cuota');
-    return view('plan-pagos.index', ['cuotas' => $cuotas->paginate(15), 'saldo' => $saldo, 'cliente' => $cliente, 'cobrador' => $cobrador]);
+    $cuotas_pagadas = $cuotas->get()->where('estado_prestamo_cuota_id', 2)->count();
+    $cuotas_atrasadas = $cuotas->get()->where('estado_prestamo_cuota_id', 1)->where('fecha_pago_programado', "<", date('Y-m-d'))->count();
+    return view('plan-pagos.index', [
+      'cuotas' => $cuotas->paginate(15), 
+      'saldo' => $saldo, 
+      'cuotas_pagadas' => $cuotas_pagadas,
+      'cuotas_atrasadas' => $cuotas_atrasadas,
+      'cliente' => $cliente, 
+      'cobrador' => $cobrador
+    ]);
   }
 
   /**

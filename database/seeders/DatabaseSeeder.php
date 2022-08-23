@@ -6,6 +6,9 @@ use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
+use Spatie\Permission\Models\Role;
+use Spatie\Permission\Models\Permission;
+use App\Models\User;
 
 class DatabaseSeeder extends Seeder
 {
@@ -54,22 +57,58 @@ class DatabaseSeeder extends Seeder
             'descripcion' => 'Nequi'
         ]);
 
+        Permission::create(['name' => 'registrar prestamo']);
+        Permission::create(['name' => 'ver prestamos']);
+        Permission::create(['name' => 'registrar pago']);
+        Permission::create(['name' => 'generar reportes']);
+        Permission::create(['name' => 'crear usuario']);
+        Permission::create(['name' => 'ver usuarios']);
+        Permission::create(['name' => 'ver cobradores']);
+        
+
+        $roleAdmin = Role::create(['name' => 'admin']);
+        $roleAdmin->givePermissionTo(Permission::all());
+
+        $roleCobrador = Role::create(['name' => 'cobrador']);
+        $roleCobrador->givePermissionTo('ver prestamos');
+        $roleCobrador->givePermissionTo('registrar prestamo');
+        $roleCobrador->givePermissionTo('registrar pago');
+        $roleCobrador->givePermissionTo('generar reportes');
+
+        
+
         DB::table('users')->insert([
             'name' => 'admin',
             'email' => 'admin@gmail.com',
             'password' => Hash::make('Admin12345'),
         ]);
 
-        DB::table('users')->insert([
-            'name' => 'user',
-            'email' => 'user@gmail.com',
-            'password' => Hash::make('User12345'),
-        ]);
+        $admin = User::find(1);
+
+        $admin->assignRole('admin');
 
         DB::table('users')->insert([
-            'name' => 'nombre cobrador',
+            'name' => 'Cobrador Pepito',
+            'email' => 'user@gmail.com',
+            'password' => Hash::make('cobrador1'),
+        ]);
+
+        $cobrador = User::find(2);
+
+        $cobrador->assignRole('cobrador');
+
+        DB::table('users')->insert([
+            'name' => 'Cobrador Juanchito',
             'email' => 'cobrador@gmail.com',
-            'password' => Hash::make('cobrador12345'),
+            'password' => Hash::make('cobrador1'),
+        ]);
+
+        $cobrador = User::find(3);
+
+        $cobrador->assignRole('cobrador');
+
+        DB::table('cobrador')->insert([
+            'user_id' => 2
         ]);
 
         DB::table('cobrador')->insert([

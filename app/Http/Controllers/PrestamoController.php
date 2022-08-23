@@ -21,10 +21,26 @@ class PrestamoController extends Controller
    *
    * @return Response
    */
-  public function index()
+  public function index(Request $request)
   {
     $user = Auth::user();
-    $prestamos = Prestamo::with(['cliente', 'periodo'])->where('usuario_creador', $user->email)->get();
+    $prestamos = Prestamo::with(['cliente', 'periodo']);
+    $cobrador_id = $request->get('cobrador');
+    if(Auth::user()->hasRole('cobrador')){
+      if(isset($cobrador_id) && $cobrador_id == Auth::user()->id){
+        $prestamos = $prestamos->where('cobrador_id', $cobrador_id)->get();
+      }else{
+        return redirect('/dashboard');
+      }
+      
+    }else{
+      if(isset($cobrador_id)){
+        $prestamos = $prestamos->where('cobrador_id', $cobrador_id)->get();
+      }else{
+        $prestamos = $prestamos->get();
+      }
+      
+    }
     return view('prestamos.index', ['prestamos' => $prestamos]);
   }
 
