@@ -32,4 +32,16 @@ class Prestamo extends Model
         //return $this->hasOne('App\Models\PeriodoPrestamo', 'id');
     }
 
+    public function cobrador()
+    {
+        return $this->belongsTo(Cobrador::class, 'cobrador_id', 'user_id');
+        //return $this->hasOne('App\Models\PeriodoPrestamo', 'id');
+    }
+
+    public function prestamoCuotas()
+    {
+        return $this->hasMany('App\Models\PrestamoCuota', 'prestamo_id');
+    }
+
+
 }

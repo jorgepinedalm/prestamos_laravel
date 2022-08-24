@@ -23,9 +23,11 @@ class PrestamoController extends Controller
    */
   public function index(Request $request)
   {
-    $user = Auth::user();
-    $prestamos = Prestamo::with(['cliente', 'periodo']);
+    $prestamos = Prestamo::with(['cliente', 'periodo', 'prestamoCuotas' => function($cuotas){
+      $cuotas->orderBy('fecha_pago_programado', 'ASC');
+    }]);
     $cobrador_id = $request->get('cobrador');
+    $cobrador = null;
     if(Auth::user()->hasRole('cobrador')){
       if(isset($cobrador_id) && $cobrador_id == Auth::user()->id){
         $prestamos = $prestamos->where('cobrador_id', $cobrador_id)->get();
@@ -35,13 +37,15 @@ class PrestamoController extends Controller
       
     }else{
       if(isset($cobrador_id)){
+        $cobrador = Cobrador::with('user')->where('user_id', $cobrador_id)->first();
         $prestamos = $prestamos->where('cobrador_id', $cobrador_id)->get();
+        
       }else{
         $prestamos = $prestamos->get();
       }
       
     }
-    return view('prestamos.index', ['prestamos' => $prestamos]);
+    return view('prestamos.index', ['prestamos' => $prestamos, 'cobrador' => $cobrador]);
   }
 
   /**

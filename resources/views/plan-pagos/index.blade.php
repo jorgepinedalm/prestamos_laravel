@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-bold text-xl text-gray-800 leading-tight">
-            {{ __('Plan de pagos prestamo #'.$cuotas[0]->prestamo->id) }}
+            {{ __('Plan de pagos crédito #'.$cuotas[0]->prestamo->id) }}
         </h2>
         <div class="flex flex-wrap">
             <div class="w-full md:w-1/2">
@@ -48,17 +48,19 @@
                         </thead>
                         <tbody>
                         @foreach($cuotas as $cuota)
-                            <tr @if(date('Y-m-d', strtotime($cuota->fecha_pago_programado)) < date('Y-m-d')) 
+                            <tr @if($cuota->estado_prestamo_cuota_id == 1 && date('Y-m-d', strtotime($cuota->fecha_pago_programado)) < date('Y-m-d')) 
                             class="red-alarm style-propagate-children" 
-                            @elseif(date('Y-m-d', strtotime($cuota->fecha_pago_programado)) == date('Y-m-d'))
+                            @elseif($cuota->estado_prestamo_cuota_id == 1 && date('Y-m-d', strtotime($cuota->fecha_pago_programado)) == date('Y-m-d'))
                             class="warning-alarm style-propagate-children" 
+                            @elseif($cuota->estado_prestamo_cuota_id == 2)
+                            class="bg-green-100 style-propagate-children" 
                             @endif>
                                 <td class="px-2 py-3">{{$cuota->id}}</td>
                                 <td class="px-2 py-3">{{$cuota->periodo->descripcion}}</td>
                                 <td class="px-2 py-3">{{date('d/m/Y', strtotime($cuota->fecha_pago_programado))}}</td>
                                 <td class="px-2 py-3">
-                                @if(!is_null($cuota->fecha_pago))
-                                    {{number_format($cuota->fecha_pago,0)}}
+                                @if(!is_null($cuota->fecha_pago_cuota))
+                                    {{date('d/m/Y', strtotime($cuota->fecha_pago_cuota,0))}}
                                 @else
                                     @if(date('Y-m-d', strtotime($cuota->fecha_pago_programado)) < date('Y-m-d'))
                                         <strong>ATRASADO</strong>

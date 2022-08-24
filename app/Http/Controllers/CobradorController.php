@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Cobrador;
 
 class CobradorController extends Controller 
 {
@@ -14,7 +15,8 @@ class CobradorController extends Controller
    */
   public function index()
   {
-    
+    $cobradores = Cobrador::with(['user', 'prestamos'])->get();
+    return view('cobrador.index',['cobradores' => $cobradores]);
   }
 
   /**

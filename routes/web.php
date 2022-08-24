@@ -7,6 +7,7 @@ use App\Http\Controllers\ClienteController;
 use App\Http\Controllers\PrestamoController;
 use App\Http\Controllers\PrestamoCuotaController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\CobradorController;
 
 /*
 |--------------------------------------------------------------------------
@@ -31,6 +32,8 @@ Route::get('/prestamos', [PrestamoController::class, 'index'])->middleware(['aut
 Route::get('/prestamos/create', [PrestamoController::class, 'create'])->middleware(['auth'])->name('prestamosCreate');
 Route::post('/prestamos/store', [PrestamoController::class, 'store'])->middleware(['auth'])->name('prestamosStore');
 Route::get('/plan-pagos', [PrestamoCuotaController::class, 'index'])->middleware(['auth'])->name('planPagos');
+Route::get('/plan-pagos/tarjeta', [PrestamoCuotaController::class, 'tarjeta'])->middleware(['auth'])->name('planPagosTarjeta');
 Route::post('/plan-pagos/store', [PrestamoCuotaController::class, 'store'])->middleware(['auth'])->name('planPagosStore');
 Route::get('/registrar-pago', [PrestamoCuotaController::class, 'create'])->middleware(['auth'])->name('planPagosCreate');
+Route::get('/cobradores', [CobradorController::class, 'index'])->middleware(['auth'])->name('cobradores');
 require __DIR__.'/auth.php';

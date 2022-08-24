@@ -1,11 +1,21 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Registrar pago a prestamo #'.$cuota->prestamo->id) }}
+            {{ __('Registrar pago a crédito #'.$cuota->prestamo->id) }}
         </h2>
         <p class="text-secondary"><strong>Cliente:</strong> {{$cliente->nombres.' '.$cliente->lastname}}</p>
         <p class="text-secondary"><strong>Cobrador:</strong> {{$cobrador->user->name}}</p>
     </x-slot>
+    @if ($errors->any())
+        <div class="alert alert-danger">
+            <strong>Whoops!</strong> There were some problems with your input.<br><br>
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
     <form id="form-create" method="POST" action="/plan-pagos/store" enctype="multipart/form-data">
     @csrf
 
@@ -13,17 +23,18 @@
             <div id="content-info-cliente" class="px-6 py-4 pb-3">
                 <div id="info-clientes" class="w-full md:w-1/2 mx-auto rounded-md border shadow-sm bg-white p-3">
                         <p class="mb-3">Ingrese la información del pago a registrar</p>
+                        <input type="hidden" id="cuota_id" name="cuota_id" value="{{$cuota->id}}">
                         <div class="columns-1">
                             <div class="field pb-3">
                                 <label for="fecha_pago_programado" class="block text-sm font-bold">Fecha de pago de cuota</label>
-                                <input type="text" id="fecha_pago_programado" name="fecha_pago_programado" class="rounded w-full" @if(isset($cuota)) value="{{date('d/m/Y',strtotime($cuota->fecha_pago_programado))}}" @endif placeholder="Ingrese la fecha de pago" maxlength="20" readonly disabled>
+                                <input type="text" id="fecha_pago_programado" name="fecha_pago_programado" class="rounded w-full" @if(isset($cuota)) value="{{date('d/m/Y',strtotime($cuota->fecha_pago_programado))}}" @endif placeholder="Ingrese la fecha de pago" maxlength="20" readonly>
                                 @if(date('Y-m-d',strtotime($cuota->fecha_pago_programado)) < date('Y-m-d'))
                                 <small class="text-red-500 font-italic">Este pago tiene un retraso de {{round((time() - strtotime($cuota->fecha_pago_programado))/ (60 * 60 * 24)) - 1}} día(s).</small>
                                 @endif
                             </div>
                             <div class="field pb-3">
                                 <label for="valor_pagado" class="block text-sm font-bold">Valor a pagar</label>
-                                <input type="text" id="valor_pagado" name="valor_pagado" class="rounded w-full" @if(isset($cuota)) value="{{number_format($cuota->valor_cuota,0)}}" @endif placeholder="Ingrese la fecha de pago" onkeypress="return isNumber(event)" onkeyup="currencyFormat(event)" onchange="checkDiffValue(event)" maxlength="10" readonly disabled>
+                                <input type="text" id="valor_pagado" name="valor_pagado" class="rounded w-full" @if(isset($cuota)) value="{{number_format($cuota->valor_cuota,0)}}" @endif placeholder="Ingrese el valor del pago" onkeypress="return isNumber(event)" onkeyup="currencyFormat(event)" onchange="checkDiffValue(event)" maxlength="10" readonly>
                                 <div class="block mt-1 text-right">
                                     <label for="valor_diferente" class="inline-flex items-center">
                                         <input id="valor_diferente" type="checkbox" class="rounded border-gray-300 text-indigo-600 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" name="valor_diferente">
@@ -68,10 +79,8 @@
             console.log(e.target.checked);
             if(e.target.checked){
                 valor_pagado.removeAttribute('readonly');
-                valor_pagado.removeAttribute('disabled');
             }else{
                 valor_pagado.setAttribute('readonly', e.target.checked);
-                valor_pagado.setAttribute('disabled', e.target.checked);
                 valor_pagado.value = valor_inicial;
                 alerta_diferencia_valor.style.display = "none";
             }

@@ -17,7 +17,9 @@ class DashboardController extends Controller
   public function index()
   {
     
-    $pagos = PrestamoCuota::with(['cliente', 'prestamo','periodo','estado'])->where('fecha_pago_programado', date('Y-m-d'));
+    $pagos = PrestamoCuota::with(['cliente', 'prestamo' => function($q){
+        $q->with(['cobrador' => function($cobrador){ $cobrador->with('user');}]);
+      },'periodo','estado'])->where('fecha_pago_programado', date('Y-m-d'));
     if(Auth::user()->hasRole('cobrador')){
         $pagos = $pagos->where('user_id', Auth::user()->id)->get();
     }else{

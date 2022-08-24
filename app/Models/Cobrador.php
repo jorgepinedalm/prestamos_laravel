@@ -21,4 +21,11 @@ class Cobrador extends Model
         return $this->hasOne('App\Models\User','id','user_id');
     }
 
+    public function prestamos()
+    {
+        return $this->hasMany('App\Models\Prestamo', 'cobrador_id');
+    }
+
+
+
 }

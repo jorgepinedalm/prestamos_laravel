@@ -116,6 +116,18 @@ input[readonly] {
     background-color: rgb(254 249 195);
 }
 
+.tarjeta .field input, .tarjeta .field .text-plain {
+    display: inline-block;
+    background: inherit;
+    border: 0;
+    border-bottom: 1px solid #333333;
+    border-radius: 0;
+    padding: .125rem .25rem;
+}
+.tarjeta .field input:focus{
+    box-shadow: none!important;
+}
+
 /*Bootstrap*/
 .fade.show {
     opacity: 1;

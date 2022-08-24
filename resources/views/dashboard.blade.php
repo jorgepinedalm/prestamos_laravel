@@ -12,7 +12,7 @@
                     Registrar pago
                 </a>
                 <a href="/prestamos/create" class="w-full sm:w-auto inline-block mb-3 sm:mb-0 border border-green-600 hover:border-green-700 font-bold text-green-600 hover:text-green-700 shadow-sm hover:shadow-lg rounded-lg px-3 py-2 uppercase">
-                    Hacer prestamo
+                    Hacer crédito
                 </a>
             </div>
             <div class="pb-6 overflow-hidden shadow-sm sm:rounded-lg">
@@ -27,7 +27,10 @@
                             <table class="w-full bg-white text-sm text-left text-gray-500 dark:text-gray-400">
                                 <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                                     <tr>
-                                        <th scope="col" class="px-2 py-3" style="width: 90px;"># Factura</th>
+                                        <th scope="col" class="px-2 py-3" style="width: 90px;">#</th>
+                                        @if(@Auth::user()->hasRole('admin'))
+                                         <th scope="col" class="px-2 py-3">Cobrador</th>
+                                        @endif
                                         <th scope="col" class="px-2 py-3">Cliente</th>
                                         <th scope="col" class="px-2 py-3">Periodo</th>
                                         <th scope="col" class="px-2 py-3 text-center" style="width: 130px;">Valor de cuota</th>
@@ -40,7 +43,12 @@
                                 <tbody>
                                     @foreach($pagos as $pago)
                                         <tr>
-                                            <td class="p-2"><a href="/plan-pagos?prestamo={{$pago->prestamo->id}}">{{str_pad($pago->prestamo->id, 8, "0", STR_PAD_LEFT )}}</a></td>
+                                            <td class="p-2"><a class="text-sky-600 underline decoration-dashed hover:decoration-solid" href="/plan-pagos?prestamo={{$pago->prestamo->id}}">{{str_pad($pago->prestamo->id, 8, "0", STR_PAD_LEFT )}}</a></td>
+                                            @if(@Auth::user()->hasRole('admin'))
+                                            <td class="p-2">
+                                                <a class="text-sky-600 underline decoration-dashed hover:decoration-solid" href="/prestamos?cobrador={{$pago->prestamo->cobrador->user->id}}">{{$pago->prestamo->cobrador->user->name}}</a>
+                                            </td>
+                                            @endif
                                             <td class="p-2">{{$pago->cliente->nombres}} {{$pago->cliente->lastname}}</td>
                                             <td class="p-2">{{$pago->periodo->descripcion}}</td>
                                             <td class="p-2 text-right">${{number_format($pago->valor_cuota,0)}}</td>
@@ -103,7 +111,7 @@
                                 @if(@Auth::user()->hasRole('cobrador'))
                                 <a href="/prestamos?cobrador={{@Auth::user()->id}}" class="stretched-link">Prestamos</a>
                                 @else
-                                <a href="/prestamos" class="stretched-link">Prestamos</a>
+                                <a href="/prestamos" class="stretched-link">Créditos</a>
                                 @endif
                                 
                             </div>
