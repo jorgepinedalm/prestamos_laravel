@@ -72,6 +72,16 @@
                                 </tbody>
                             </table>
                         </div>
+                        <br>
+                        <div class="text-right py-3">
+                            <a href="/plan-pagos/tarjeta" class="rounded shadow-sm md:shadow-lg px-3 py-2 border border-green-600 font-bold">
+                            @if(@Auth::user()->hasRole('admin'))
+                            Ver tarjetas a cobrar hoy
+                            @elseif(@Auth::user()->hasRole('cobrador'))
+                            Ver mis tarjetas de hoy
+                            @endif
+                            </a>
+                        </div>
                     @else
                         <p>No hay cobros a realizar el día de hoy</p>
                     @endif

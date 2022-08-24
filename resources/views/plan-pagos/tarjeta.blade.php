@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-bold text-xl text-gray-800 leading-tight">
-            {{ __('Plan de pagos crédito #'.$cuotas[0]->prestamo->id) }}
+            {{ __('Tarjetas del día '.date('d/m/Y')) }}
         </h2>
         <div class="flex flex-wrap">
             <div class="w-full md:w-1/2">
@@ -11,9 +11,10 @@
         </div>
         
     </x-slot>
-    <div class="tarjeta-wrapper flex flex-wrap justify-center items-center bg-stone-50 py-8 px-3 sm:px-8">
+    
+    <div class="tarjeta-wrapper flex flex-wrap justify-center items-center bg-stone-50 p-3 sm:px-8">
         <div class="tarjeta w-full md:w-4/5 lg:w-2/3 2xl:w-1/2 bg-white border border-cyan-600 shadow-lg rounded mb-3">
-            <h3 class="text-center bg-cyan-600 text-white p-2 font-bold">Tarjeta</h3>
+            <h3 class="text-center bg-cyan-600 text-white p-2 font-bold">Tarjeta # {{str_pad($cuotas[0]->prestamo->id, 7, "0", STR_PAD_LEFT )}}</h3>
             @if(isset($cliente))
             <div class="flex flex-wrap w-full px-2 py-3 sm:px-3 text-xs sm:text-sm 2xl:text-base">
                 
@@ -95,7 +96,7 @@
                 </div>
                 <div class="w-full md:w-1/2 text-center md:text-right">
                     <span class="mr-3 text-sm italic text-slate-500">
-                        <span class="rounded-full p-1 bg-green-100 inline-block border-2"></span> Vencido
+                        <span class="rounded-full p-1 bg-green-100 inline-block border-2"></span> Pagado
                     </span>
                     <span class="mr-3 text-sm italic text-slate-500">
                         <span class="rounded-full p-1 bg-amber-100 inline-block border-2"></span> Pago hoy
@@ -140,8 +141,12 @@
             </div>
         </div>
         <div class="p-3 mb-3 w-full text-center">
-            <a href="#" class="rounded px-3 py-2 bg-white border font-bold shadow-sm hover:shadow-lg mr-2">Anterior</a>
-            <a href="#" class="rounded px-3 py-2 bg-white border font-bold shadow-sm hover:shadow-lg">Siguiente</a>
+            @if(!is_null($anterior))
+            <a href="/plan-pagos/tarjeta?prestamo={{$anterior->prestamo_id}}" class="rounded px-3 py-2 bg-white border font-bold shadow-sm hover:shadow-lg mr-2">Anterior</a>
+            @endif
+            @if(!is_null($siguiente))
+            <a href="/plan-pagos/tarjeta?prestamo={{$siguiente->prestamo_id}}" class="rounded px-3 py-2 bg-white border font-bold shadow-sm hover:shadow-lg">Siguiente</a>
+            @endif
         </div>
     </div>
     <script>

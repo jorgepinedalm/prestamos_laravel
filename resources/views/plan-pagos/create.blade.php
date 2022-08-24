@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Registrar pago a crédito #'.$cuota->prestamo->id) }}
+            {{ __('Registrar pago a tarjeta #'.str_pad($cuota->prestamo->id, 7, "0", STR_PAD_LEFT )) }}
         </h2>
         <p class="text-secondary"><strong>Cliente:</strong> {{$cliente->nombres.' '.$cliente->lastname}}</p>
         <p class="text-secondary"><strong>Cobrador:</strong> {{$cobrador->user->name}}</p>
@@ -20,7 +20,7 @@
     @csrf
 
         <div class="content">
-            <div id="content-info-cliente" class="px-6 py-4 pb-3">
+            <div id="content-info-cliente" class="px-3 sm:px-6 py-4 pb-3">
                 <div id="info-clientes" class="w-full md:w-1/2 mx-auto rounded-md border shadow-sm bg-white p-3">
                         <p class="mb-3">Ingrese la información del pago a registrar</p>
                         <input type="hidden" id="cuota_id" name="cuota_id" value="{{$cuota->id}}">
@@ -60,9 +60,13 @@
                             <div id="alerta_diferencia_valor" role="alert" class="rounded bg-yellow-200 text-sm mb-3 p-2 border border-yellow-400">
                                 Tenga en cuenta que ingreso un valor a pagar diferente al definido en esta cuota
                             </div>
-                            <button id="btn-save" type="submit" class="px-3 py-2 mb-3 sm:mb-0 rounded shadow-sm hover:shadow-lg border border-green-500 bg-green-500 text-white text-sm">
-                                <span class="fa-solid fa-floppy-disk" aria-hidden="true"></span> <strong>Registrar pago</strong>
-                            </button>
+                            <div class="text-center">
+                                <button id="btn-save" type="submit" class="px-3 py-2 mb-3 mr-2 sm:mb-0 rounded shadow-sm hover:shadow-lg border border-green-500 bg-green-500 text-white text-sm">
+                                    <span class="fa-solid fa-floppy-disk" aria-hidden="true"></span> <strong>Registrar pago</strong>
+                                </button>
+                                <a href="/plan-pagos/tarjeta?prestamo={{$cuota->prestamo->id}}" class="px-3 py-2 rounded shadow-sm hover:shadow-lg border border-green-500 bg-white-500 text-sm">Volver</a>
+                            </div>
+                            
                         </div>
                 </div>
                 

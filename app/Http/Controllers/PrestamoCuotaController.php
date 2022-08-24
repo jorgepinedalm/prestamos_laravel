@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\PrestamoCuota;
+use App\Models\Prestamo;
 use App\Models\Cobrador;
 use App\Models\MedioPago;
 
@@ -46,15 +47,46 @@ class PrestamoCuotaController extends Controller
    */
   public function tarjeta(Request $request)
   {
+    $prestamo_id = $request->get('prestamo');
     $cuotas = PrestamoCuota::with(['cliente','periodo','estado','prestamo' => function($q){
       $q->with('cobrador');
-    }])->where('prestamo_id', $request->get('prestamo'));
+    }]);
+    if(isset($prestamo_id)){
+      $cuotas = $cuotas->where('prestamo_id', $prestamo_id);
+    }else{
+      $primerPrestamo = Prestamo::orderBy('id','ASC');
+      if(Auth::user()->hasRole('cobrador')){
+        $primerPrestamo = $primerPrestamo->where('cobrador_id',Auth::user()->id);
+      }else{
+        $primerPrestamo = $primerPrestamo->whereHas('prestamoCuotas', function ($query) {
+            $query->where('fecha_pago_programado', date('Y-m-d'));
+        });
+      }
+      $primerPrestamo = $primerPrestamo->first();
+      $cuotas = $cuotas->where('prestamo_id', $primerPrestamo->id);
+      $prestamo_id = $primerPrestamo->id;
+    }
+    
+    
     $cliente = $cuotas->get()[0]->cliente;
     $cobrador = Cobrador::with('user')->where('user_id', $cuotas->get()[0]->prestamo->cobrador_id)->first();
     $saldo = $cuotas->get()->where('estado_prestamo_cuota_id', 1)->sum('valor_cuota');
     $cuotas_pagadas = $cuotas->get()->where('estado_prestamo_cuota_id', 2)->count();
     $cuotas_atrasadas = $cuotas->get()->where('estado_prestamo_cuota_id', 1)->where('fecha_pago_programado', "<", date('Y-m-d'))->count();
     $cuotas_totales = $cuotas->get();
+    if($cuotas->get()[0] != null){
+      $anterior = PrestamoCuota::with('prestamo')->where('fecha_pago_programado', date('Y-m-d'));
+      if(Auth::user()->hasRole('cobrador')){
+        $anterior = $anterior->where('user_id',Auth::user()->id);
+      }
+      $anterior = $anterior->where('prestamo_id','<',$prestamo_id)->orderBy('prestamo_id','DESC')->first();
+      $siguiente = PrestamoCuota::with('prestamo')->where('fecha_pago_programado', date('Y-m-d'));
+      if(Auth::user()->hasRole('cobrador')){
+        $siguiente = $siguiente->where('user_id',Auth::user()->id);
+      }
+      $siguiente = $siguiente->where('prestamo_id','>',$prestamo_id)->orderBy('prestamo_id','ASC')->first();
+    }
+    
     return view('plan-pagos.tarjeta', [
       'cuotas' => $cuotas->get(), 
       'saldo' => $saldo, 
@@ -62,7 +94,9 @@ class PrestamoCuotaController extends Controller
       'cuotas_atrasadas' => $cuotas_atrasadas,
       'cuotasTotales' => $cuotas_totales,
       'cliente' => $cliente, 
-      'cobrador' => $cobrador
+      'cobrador' => $cobrador,
+      'anterior' => $anterior,
+      'siguiente' => $siguiente
     ]);
   }
 
